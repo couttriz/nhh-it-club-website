@@ -2,56 +2,152 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NHH IT Club - CLB Tin học</title>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
-
-    <link rel="stylesheet" href="css/style-guide.css">
-    <link rel="stylesheet" href="css/global.css">
-    <link rel="stylesheet" href="css/home.css"> </head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-select=no">
+    <title>Mê Cung 8/3 - Vượt Ngục Tặng Quà</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&family=Pacifico&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/3.60.0/phaser.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
 <body>
-
-    <header class="main-header">
-        <div class="container">
-            <a href="index.html" class="logo">NHH IT CLUB</a>
-            <nav class="navbar">
-                <ul class="nav-links">
-                    <li><a href="index.html" class="active">Trang chủ</a></li>
-                    <li><a href="pages/members.html">Thành viên</a></li>
-                    <li><a href="pages/projects.html">Dự án</a></li>
-                    <li><a href="pages/blog.html">Blog</a></li>
-                </ul>
-                <div class="menu-toggle" id="mobile-menu">
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                </div>
-            </nav>
-        </div>
-    </header>
-
-    <main>
-        <section class="hero-section">
-            <h1>Chào mừng đến với <span class="highlight">NHH IT Club</span></h1>
-            <p>Nơi ươm mầm đam mê công nghệ.</p>
-            <a href="pages/projects.html" class="btn-primary">Xem Dự Án</a>
-        </section>
-        
-        </main>
-
-    <footer class="main-footer">
-        <div class="container">
-            <p>&copy; 2024 NHH IT Club. All rights reserved.</p>
-            <div class="social-links">
-                <a href="#">Facebook</a>
-                <a href="#">Github</a>
+    <div id="side-left" class="side-panel">
+        <h3 class="panel-title">🎮 Hướng Dẫn</h3>
+        <div class="keyboard">
+            <div class="key-row">
+                <div class="key">↑</div>
+            </div>
+            <div class="key-row">
+                <div class="key">←</div>
+                <div class="key">↓</div>
+                <div class="key">→</div>
             </div>
         </div>
-    </footer>
+        <p class="panel-text">Sử dụng các phím mũi tên trên bàn phím để di chuyển nhân vật.</p>
+    </div>
 
-    <script src="js/main.js"></script>
+    <div id="side-right" class="side-panel">
+        <h3 class="panel-title">🎯 Nhiệm Vụ</h3>
+        <ul class="task-list">
+            <li>Tìm đường đến Cổng không gian màu vàng.</li>
+            <li>Nếu đụng độ quái vật, hãy trả lời đúng câu hỏi để đi tiếp!</li>
+        </ul>
+        <hr class="panel-divider">
+    </div>
+
+    <div id="mobile-controls">
+        <div class="control-row">
+            <button id="btn-up" class="ctrl-btn">▲</button>
+        </div>
+        <div class="control-row middle-row">
+            <button id="btn-left" class="ctrl-btn">◀</button>
+            <div class="center-dot"></div> <button id="btn-right" class="ctrl-btn">▶</button>
+        </div>
+        <div class="control-row">
+            <button id="btn-down" class="ctrl-btn">▼</button>
+        </div>
+    </div>
+
+    <div class="page-wrapper">
+        <header>
+            <h1>Hành Trình Gửi Trao</h1>
+            <p class="subtitle">Vượt qua mê cung bóng tối để mang thiệp đến tay người thương!</p>
+        </header>
+        <div id="game-wrapper">
+            <div id="ui-bar">
+                <span id="hearts-text">Mạng: <span id="hearts">❤️❤️❤️</span></span>
+                <span id="timer-text">⏳ Thời gian: <span id="time-left">90</span>s</span>
+            </div>
+
+            <div id="game-container"></div>
+
+            <div id="quiz-modal" class="modal hidden">
+                <div class="modal-content quiz-box">
+                    <h3 id="quiz-title">Quái vật cản đường!</h3>
+                    <p id="quiz-question">Nội dung câu hỏi sẽ hiện ở đây...</p>
+                    <div class="answers-grid">
+                        <button class="ans-btn" id="btn-0">A</button>
+                        <button class="ans-btn" id="btn-1">B</button>
+                        <button class="ans-btn" id="btn-2">C</button>
+                        <button class="ans-btn" id="btn-3">D</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="gameover-modal" class="modal hidden">
+                <div class="modal-content danger-box">
+                    <h2 id="gameover-title">THẤT BẠI!</h2>
+                    <p id="gameover-desc">Bạn đã cạn kiệt sinh lực hoặc hết thời gian...</p>
+                    <button id="restart-btn" onclick="location.reload()">Chơi Lại Từ Đầu</button>
+                </div>
+            </div>
+
+            <div id="victory-modal" class="modal hidden">
+                
+                <div id="envelope-wrapper" onclick="openLetter()">
+                    <div class="envelope">
+                        <div class="envelope-front"></div>
+                        <div class="envelope-flap"></div>
+                        <div class="heart-sticker">❤️</div>
+                    </div>
+                    <p class="click-to-open">Bức thư mất tích lộ diện. Nhấn vào để mở !</p>
+                </div>
+
+                <div id="letter-content" class="hidden">
+                <div class="deco-frame">
+                    <div class="corner-cluster top-left"></div>
+                    <div class="corner-cluster top-right"></div>
+                    <div class="corner-cluster bottom-left"></div>
+                    <div class="corner-cluster bottom-right"></div>
+
+                    <div class="floating-item fl-1"></div>
+                    <div class="floating-item fl-2"></div>
+                    <div class="floating-item fl-3"></div>
+                    <div class="floating-item fl-4"></div>
+                    <div class="floating-item fl-5"></div>
+                </div>
+                <div class="glass-box">
+                <h2 class="card-title">Chúc Mừng Ngày 8/3!</h2>
+                <p class="card-text">Tuyệt vời! Bạn đã xuất sắc vượt qua mê cung. Chúc một nửa thế giới luôn xinh đẹp, tự tin và rạng rỡ như những đóa hoa!</p>
+                <p class="card-sign">Từ: NHH IT Club ❤️</p>
+                <button id="restart-btn" onclick="location.reload()">Chơi Lại Từ Đầu</button>
+                </div>
+        </div>
+                
+            </div>
+        </div>
+
+        <!-- <div id="club-footer">
+            <p>Bản quyền © 2026 | Phát triển bởi <strong>CLB IT Cre8tive A8</strong></p>
+            <p>📧 Email: <a href="mailto:itclub.cre8tivea8@example.com">itclub.cre8tivea8@example.com</a> &nbsp;|&nbsp; 🌐 Fanpage: <a href="#" target="_blank">FB.com/Cre8tiveA8</a></p>
+        </div> -->
+
+    </div> <script src="game.js"></script>
+    </div>
+    <script src="game.js"></script>
+    <script>
+        function openLetter() {
+            // Khi click: Ẩn phong bì đi và Hiện khung chữ lên
+            document.getElementById('envelope-wrapper').classList.add('hidden');
+            document.getElementById('letter-content').classList.remove('hidden');
+        }
+    </script>
+
+    <audio id="bgm-letter" src="song.mp3" loop></audio>
+
+    <script src="game.js"></script>
+    <script>
+        function openLetter() {
+            // 1. Ẩn phong bì đi và Hiện khung chữ lên
+            document.getElementById('envelope-wrapper').classList.add('hidden');
+            document.getElementById('letter-content').classList.remove('hidden');
+
+            // 2. KÍCH HOẠT NHẠC NỀN NHẸ NHÀNG
+            let letterMusic = document.getElementById('bgm-letter');
+            letterMusic.volume = 0.5; // Chỉnh âm lượng (0.1 là rất nhỏ, 1.0 là to nhất)
+            
+            // Lệnh .play() sẽ tự động phát nhạc khi người dùng click
+            letterMusic.play();
+        }
+    </script>
 </body>
 </html>
+
